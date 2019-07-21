@@ -26,7 +26,8 @@ namespace raytracer {
         for(int i = 0; i < _px; i++) {
             for(int j = 0; j < _py; j++) {
                 vec3f pixelPos = getPixelPosition(i, j);
-                vec3f dir = pixelPos + getGazeDirection();// - transform.getPosition();
+                vec3f dir = pixelPos + getGazeDirection();
+
                 Ray ray(transform.getPosition(),
                         dir.normalize());
 

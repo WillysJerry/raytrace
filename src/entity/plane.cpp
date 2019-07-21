@@ -20,12 +20,17 @@ namespace raytracer {
             if (t >= Entity::_eps) {
 
                 hit.t = t;
-                hit.point = ray.origin + ray.direction * t;
-                hit.normal = _normal;
+                hit.entity = this;
+                //hit.point = ray.origin + ray.direction * t;
+                //hit.normal = _normal;
                 return true;
             }
         }
 
         return false;
+    }
+
+    vec3f Plane::normalAtPoint(const vec3f& point) const {
+        return _normal;
     }
 }

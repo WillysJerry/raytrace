@@ -5,18 +5,19 @@
 #include <entity.h>
 
 namespace raytracer {
+    class Entity;
+
     struct RayHit {
         public:
             float t;
-            vec3f point;
-            vec3f normal;
+            const Entity* entity;
 
             RayHit() {}
             /*RayHit(const vec3f& point, const vec3f& normal)
                 : point(point), normal(normal) {}*/
 
-            RayHit(const float& t, const vec3f& point, const vec3f& normal)
-                : t(t), point(point), normal(normal) {}
+            RayHit(float t, const Entity* entity)
+                : t(t), entity(entity) {}
     };
 };
 

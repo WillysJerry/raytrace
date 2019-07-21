@@ -25,17 +25,36 @@ std::vector<Camera> cameras;
 //Camera camera( 320, 320, 0.02 );
 LightModel* lightModel;
 
+void toPPM() {
+    PixBuf* pixBuf;
+    cameras[activeCamera].render(*lightModel, scene, lights, pixBuf);
+
+    std::ofstream out("out.ppm");
+    out << "P3\n" << pixBuf->getWidth() << ' ' << pixBuf->getHeight() << ' ' << "255\n";
+
+    Color c;
+    for(int i = 0; i < pixBuf->getHeight(); i++) {
+        for(int j = 0; j < pixBuf->getWidth(); j++) {
+            c = (*pixBuf)(j, i);
+            out << (int)(c.r * (float)255) << ' '
+                << (int)(c.g * (float)255) << ' '
+                << (int)(c.b * (float)255) << '\n';
+        }
+    }
+}
+
+
 void update(void) {
     glutPostRedisplay();
 }
 void keyPressed(unsigned char key, int x, int y) {
     vec3f d;
-    float rot = 0.52359;
+    float rot = DEGREES_TO_RADIANS(10);
 
     Camera& cam = cameras[activeCamera];
     std::cout << "Camera position: " << cam.transform.getPosition() <<
-        ". Camera forward: " << cam.transform.getForwardVector() <<
-        ". Camera up: " << cam.transform.getUpVector() << std::endl;
+        ".\n Camera forward: " << cam.transform.getForwardVector() <<
+        ".\n Camera up: " << cam.transform.getUpVector() << std::endl << std::endl;
 
     switch(key) {
         case 'q':
@@ -64,6 +83,9 @@ void keyPressed(unsigned char key, int x, int y) {
             break;
         case 'c':
             activeCamera = (activeCamera + 1) % cameras.size();
+            break;
+        case 'p':
+            toPPM();
             break;
     }
 
@@ -97,24 +119,6 @@ void renderScene(void) {
     glutSwapBuffers();
 
     delete pixBuf;
-}
-
-void toPPM() {
-    PixBuf* pixBuf;
-    cameras[activeCamera].render(*lightModel, scene, lights, pixBuf);
-
-    std::ofstream out("out.ppm");
-    out << "P3\n" << pixBuf->getWidth() << ' ' << pixBuf->getHeight() << ' ' << "255\n";
-
-    Color c;
-    for(int i = 0; i < pixBuf->getHeight(); i++) {
-        for(int j = 0; j < pixBuf->getWidth(); j++) {
-            c = (*pixBuf)(j, i);
-            out << (int)(c.r * (float)255) << ' '
-                << (int)(c.g * (float)255) << ' '
-                << (int)(c.b * (float)255) << '\n';
-        }
-    }
 }
 
 int main(int argc, char *argv[]) {

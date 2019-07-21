@@ -15,29 +15,34 @@ namespace raytracer {
     bool Sphere::rayIntersects(const Ray& ray, RayHit& hit) const {
         vec3f to = ray.origin - transform.getPosition();
 
-        float d0 = vec3f::dot(ray.direction, to);
-        float denom = vec3f::dot(ray.direction, ray.direction);
+        float a = vec3f::dot(ray.direction, ray.direction);
+        float b = 2.0 * vec3f::dot(to, ray.direction);
+        float c = vec3f::dot(to, to) - _radius*_radius;
 
-        float disc = d0*d0 -
-            denom *
-            (vec3f::dot(to, to) - _radius*_radius);
+        float discriminant = b*b - 4*a*c;
 
-        if(disc > Entity::_eps) {
-            float sqrdDisc = sqrt(disc);
-            float t0 = (vec3f::dot(-ray.direction, to) + sqrdDisc) / denom;
-            float t1 = (vec3f::dot(-ray.direction, to) - sqrdDisc) / denom;
+        if(discriminant > Entity::_eps) {
+            float sqrtDiscriminant = std::sqrt(discriminant);
+            float numerator = -b - sqrtDiscriminant;
 
-            float t = fmin(t0, t1);
-
-            if(t < 0.0) {
-                return false;
+            if(numerator > Entity::_eps) {
+                hit.t = numerator / 2.0 * a;
+                hit.entity = this;
+                return true;
             }
-            vec3f point = ray.origin + ray.direction * t;
-            vec3f normal = (point - transform.getPosition()) / _radius;
 
-            hit = RayHit(t, point, normal);
-            return true;
+            numerator = -b + sqrtDiscriminant;
+
+            if(numerator > Entity::_eps) {
+                hit.t = numerator / 2.0 * a;
+                hit.entity = this;
+                return true;
+            }
         }
         return false;
+    }
+
+    vec3f Sphere::normalAtPoint(const vec3f& point) const {
+        return (point - transform.getPosition()) / _radius;
     }
 };

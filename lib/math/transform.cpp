@@ -15,15 +15,15 @@ namespace raytracer {
     }
 
     vec3f Transform::getForwardVector() const {
-        return (_rotationMatrix * vec4f(0, 0, 1, 1)).normalize();
+        return vec3f::normalized(_rotationMatrix * vec4f(0, 0, 1, 1));
     }
 
     vec3f Transform::getUpVector() const {
-        return (_rotationMatrix * vec4f(0, 1, 0, 1)).normalize();
+        return vec3f::normalized(_rotationMatrix * vec4f(0, 1, 0, 1));
     }
 
     vec3f Transform::getRightVector() const {
-        return (_rotationMatrix * vec4f(-1, 0, 0, 1)).normalize();
+        return vec3f::normalized(_rotationMatrix * vec4f(-1, 0, 0, 1));
     }
 
     void Transform::translate(const vec3f& translation) {

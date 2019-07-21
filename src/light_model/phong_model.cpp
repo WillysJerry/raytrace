@@ -15,34 +15,33 @@ namespace raytracer {
 
         bool hitSomething = false;
         float closest = std::numeric_limits<float>::max();
-        RayHit closestHit;
-        Entity* closestEntity;
+        RayHit closestHit(std::numeric_limits<float>::max(), NULL);
 
         RayHit hit;
         for(Entity* entity : scene) {
             if(entity->rayIntersects(ray, hit)) {
-                if(hit.t <= closest) {
+                if(hit.t <= closestHit.t) {
                     hitSomething = true;
-                    closest = hit.t;
                     closestHit = hit;
-                    closestEntity = entity;
                 }
 
             }
         }
 
         if(hitSomething) {
+            vec3f point = ray.pointAtParam(closestHit.t);
+            vec3f normal = closestHit.entity->normalAtPoint(point);
             for(Light* light : lights) {
-                vec3f v = (ray.origin - closestHit.point).normalize();
-                vec3f l = (light->position - closestHit.point).normalize();
+                vec3f v = (ray.origin - point).normalize();
+                vec3f l = (light->position - point).normalize();
                 vec3f h = (v + l) / (v + l).magnitude();
 
-                Color diffuse = closestEntity->getDiffuse() *
+                Color diffuse = closestHit.entity->getDiffuse() *
                     light->intensity *
-                    fmax(0, vec3f::dot(closestHit.normal, l));
-                Color specular = closestEntity->getSpecular() *
+                    fmax(0, vec3f::dot(normal, l));
+                Color specular = closestHit.entity->getSpecular() *
                     light->intensity *
-                    std::pow(fmax(0, vec3f::dot(closestHit.normal, h)), closestEntity->getShininess());
+                    std::pow(fmax(0, vec3f::dot(normal, h)), closestHit.entity->getShininess());
 
                 color += diffuse + specular;
             }

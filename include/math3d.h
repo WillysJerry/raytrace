@@ -4,6 +4,12 @@
 #include <cmath>
 #include <ostream>
 
+#define R2D 57.2958
+#define D2R 0.0174533
+
+#define RADIANS_TO_DEGREES(X) ( (X) * R2D )
+#define DEGREES_TO_RADIANS(X) ( (X) * D2R )
+
 namespace raytracer {
     template<class T>
     class Vector3;
@@ -39,8 +45,11 @@ namespace raytracer {
             }
 
             Vector3<T> normalize() const {
-                T len = magnitude();
-                return Vector3<T>(x/len, y/len, z/len);
+                return normalized(*this);
+            }
+
+            static Vector3<T> normalized(const Vector3<T>& vector) {
+                return vector / vector.magnitude();
             }
 
             static T dot(const Vector3<T> lhs,

@@ -9,8 +9,10 @@ namespace raytracer {
             vec3f origin;
             vec3f direction;
 
-            Ray(vec3f origin, vec3f direction) : origin(origin),
-                                                 direction(direction) {}
+            Ray(const vec3f& origin, const vec3f& direction) : origin(origin),
+                                                               direction(direction) {}
+
+            vec3f pointAtParam(const float& t) const { return origin + t * direction; }
     };
 };
 
