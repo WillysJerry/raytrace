@@ -17,7 +17,6 @@ namespace raytracer {
             Camera(const int& px, const int& py, const float& focalDist, const vec3f& position = vec3f(0,0,0));
             ~Camera();
 
-            vec3f getGazeDirection() const;
             void render(const LightModel& lightModel, const std::vector<Entity*>& scene, const std::vector<Light*>& lights, PixBuf*& pixelBuffer) const;
 
         private:

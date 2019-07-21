@@ -17,16 +17,12 @@ namespace raytracer {
     Camera::~Camera() {
     }
 
-    vec3f Camera::getGazeDirection() const {
-        return transform.getForwardVector();
-    }
-
     void Camera::render(const LightModel& lightModel, const std::vector<Entity*>& scene, const std::vector<Light*>& lights, PixBuf*& pixelBuffer) const {
         pixelBuffer = new PixBuf(_px, _py);
         for(int i = 0; i < _px; i++) {
             for(int j = 0; j < _py; j++) {
                 vec3f pixelPos = getPixelPosition(i, j);
-                vec3f dir = pixelPos + getGazeDirection();
+                vec3f dir = transform.getRotationMatrix() * (pixelPos + vec3f(0, 0, 1));
 
                 Ray ray(transform.getPosition(),
                         dir.normalize());

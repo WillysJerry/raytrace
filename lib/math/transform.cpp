@@ -23,7 +23,7 @@ namespace raytracer {
     }
 
     vec3f Transform::getRightVector() const {
-        return vec3f::normalized(_rotationMatrix * vec4f(-1, 0, 0, 1));
+        return vec3f::normalized(_rotationMatrix * vec4f(1, 0, 0, 1));
     }
 
     void Transform::translate(const vec3f& translation) {

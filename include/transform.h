@@ -12,6 +12,10 @@ namespace raytracer {
             Transform();
             ~Transform();
 
+            const mat4x4f& getTranslationMatrix() const { return _translationMatrix; }
+            const mat4x4f& getRotationMatrix()    const { return _rotationMatrix; }
+            const mat4x4f& getScalingMatrix()     const { return _scalingMatrix; }
+
             vec3f getPosition() const { return _position; }
 
             vec3f getForwardVector() const;

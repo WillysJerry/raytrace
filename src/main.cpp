@@ -61,10 +61,16 @@ void keyPressed(unsigned char key, int x, int y) {
 
     switch(key) {
         case 'q':
-            cam.transform.axisRotate(-rot, Axis::Y);
+            cam.transform.axisRotate(rot, Axis::Y);
+            break;
+        case 'Q':
+            cam.transform.axisRotate(rot, Axis::X);
             break;
         case 'e':
-            cam.transform.axisRotate(rot, Axis::Y);
+            cam.transform.axisRotate(-rot, Axis::Y);
+            break;
+        case 'E':
+            cam.transform.axisRotate(-rot, Axis::X);
             break;
         case 'w':
             cam.transform.translate(cam.transform.getForwardVector());
@@ -130,12 +136,13 @@ void renderScene(void) {
 int main(int argc, char *argv[]) {
 
     //Camera camera( 320, 320, 0.02 );
-    cameras.push_back(Camera(320, 320, 0.001, vec3f(0,1,-4.0)));
-    cameras[0].transform.axisRotate(3.14, Axis::Y);
-    cameras.push_back(Camera(320, 320, 0.001, vec3f(-7,0,-5)));
-    cameras[1].transform.axisRotate(1.571, Axis::Y);
-    cameras.push_back(Camera(320, 320, 0.001, vec3f(0,10,-8)));
-    cameras[2].transform.axisRotate(1.571, Axis::X);
+    cameras.push_back(Camera(320, 320, 0.001, vec3f(0,1,0)));
+    cameras[0].transform.axisRotate(DEGREES_TO_RADIANS(180), Axis::Y);
+    cameras.push_back(Camera(320, 320, 0.001, vec3f(-13,0,-6)));
+    cameras[1].transform.axisRotate(DEGREES_TO_RADIANS(225), Axis::Y);
+    cameras.push_back(Camera(320, 320, 0.001, vec3f(0,15,-14)));
+    cameras[2].transform.axisRotate(DEGREES_TO_RADIANS(90), Axis::X);
+    cameras[2].transform.axisRotate(DEGREES_TO_RADIANS(180), Axis::Y);
 
     Material red(Color(1, 0, 0),
                  Color(1, 1, 1),
