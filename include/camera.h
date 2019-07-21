@@ -7,8 +7,7 @@
 #include <transform.h>
 #include <pixbuf.h>
 #include <entity.h>
-
-#include "../light_model/light_model.h"
+#include <light_model.h>
 
 namespace raytracer {
     class Camera {

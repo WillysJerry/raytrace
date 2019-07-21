@@ -11,8 +11,8 @@
 #include <material.h>
 #include <entity.h>
 
-#include "camera/camera.h"
-#include "light_model/light_model.h"
+#include <camera.h>
+#include <light_model.h>
 
 using namespace raytracer;
 

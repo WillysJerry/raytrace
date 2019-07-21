@@ -1,4 +1,4 @@
-#include "camera.h"
+#include <camera.h>
 
 #include <ray.h>
 #include <ray_hit.h>

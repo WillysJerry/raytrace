@@ -1,4 +1,4 @@
-#include "light_model.h"
+#include <light_model.h>
 
 #include <limits>
 
