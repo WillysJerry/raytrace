@@ -10,7 +10,7 @@ namespace raytracer {
         public:
 
             Transform();
-            Transform(const vec3f& position, const vec3f& rotation, const vec3f& scaling);
+            Transform(const vec3f& position = vec3f(0,0,0), const vec3f& rotation = vec3f(0,0,0), const vec3f& scaling = vec3f(1,1,1));
             ~Transform();
 
             const mat4x4f& getTranslationMatrix() const { return _translationMatrix; }

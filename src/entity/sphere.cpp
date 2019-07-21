@@ -4,12 +4,8 @@
 #include <cmath>
 
 namespace raytracer {
-    Sphere::Sphere(const vec3f& position, const float& radius) :
-        Entity(position), _radius(radius) {
-    }
-
-    Sphere::Sphere(const vec3f& position, const float& radius, const Material& material) :
-        Entity(position, material), _radius(radius) {
+    Sphere::Sphere(const Transform& transform, const float& radius, const Material& material) :
+        Entity(transform, material), _radius(radius) {
     }
 
     bool Sphere::rayIntersects(const Ray& ray) const {

@@ -14,8 +14,7 @@ namespace raytracer {
         public:
             Transform transform;
 
-            Entity(const vec3f& position);
-            Entity(const vec3f& position, const Material& material);
+            Entity(const Transform& transform, const Material& material = Material());
 
             virtual Color getDiffuse() const { return _material.diffuse; }
             virtual Color getSpecular() const { return _material.specular; }
@@ -35,21 +34,19 @@ namespace raytracer {
 
     class Plane : public Entity {
         public:
-            Plane(const vec3f& position);
-            Plane(const vec3f& position, const Material& material);
+            Plane(const Transform& transform, const Material& material = Material());
 
             bool rayIntersects(const Ray& ray) const override;
             bool rayIntersects(const Ray& ray, RayHit& hit) const override;
             vec3f normalAtPoint(const vec3f& point) const override;
 
         protected:
-            vec3f _normal;
+            vec3f getNormal() const;
     };
 
     class Sphere : public Entity {
         public:
-            Sphere(const vec3f& position, const float& radius);
-            Sphere(const vec3f& position, const float& radius, const Material& material);
+            Sphere(const Transform& transform, const float& radius, const Material& material = Material());
 
             bool rayIntersects(const Ray& ray) const override;
             bool rayIntersects(const Ray& ray, RayHit& hit) const override;
