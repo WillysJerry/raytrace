@@ -17,17 +17,20 @@
 using namespace raytracer;
 
 int activeCamera = 0;
+int activeLightModel = 0;
 
 std::vector<Entity*> scene;
 std::vector<Light*> lights;
 std::vector<Camera> cameras;
+std::vector<LightModel*> lightModels;
 
 //Camera camera( 320, 320, 0.02 );
-LightModel* lightModel;
+//LightModel* lightModel;
+
 
 void toPPM() {
     PixBuf* pixBuf;
-    cameras[activeCamera].render(*lightModel, scene, lights, pixBuf);
+    cameras[activeCamera].render(*lightModels[activeLightModel], scene, lights, pixBuf);
 
     std::ofstream out("out.ppm");
     out << "P3\n" << pixBuf->getWidth() << ' ' << pixBuf->getHeight() << ' ' << "255\n";
@@ -84,6 +87,9 @@ void keyPressed(unsigned char key, int x, int y) {
         case 'c':
             activeCamera = (activeCamera + 1) % cameras.size();
             break;
+        case 'l':
+            activeLightModel = (activeLightModel + 1) % lightModels.size();
+            break;
         case 'p':
             toPPM();
             break;
@@ -96,7 +102,7 @@ void renderScene(void) {
     static int a = 0;
 
     PixBuf* pixBuf;
-    cameras[activeCamera].render(*lightModel, scene, lights, pixBuf);
+    cameras[activeCamera].render(*lightModels[activeLightModel], scene, lights, pixBuf);
 
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -176,7 +182,11 @@ int main(int argc, char *argv[]) {
     //lights.push_back(new Light(vec3f(2.0, 3.0, -5.0), Color(1.0, 0.2, 0.3)));
     //
 
-    lightModel = new PhongModel();
+    //lightModel = new PhongModel();
+    //lightModel = new LambertModel();
+
+    lightModels.push_back(new PhongModel());
+    lightModels.push_back(new LambertModel());
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);

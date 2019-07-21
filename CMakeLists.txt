@@ -17,6 +17,8 @@ set(SOURCE_FILES
   src/entity/entity.cpp
   src/entity/sphere.cpp
   src/entity/plane.cpp
+  src/light_model/light_model.cpp
+  src/light_model/lambert_model.cpp
   src/light_model/phong_model.cpp)
 
 add_library(mathlib STATIC ${MATH_FILES})

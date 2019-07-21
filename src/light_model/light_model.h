@@ -6,6 +6,7 @@
 #include <color.h>
 #include <light.h>
 #include <entity.h>
+#include <ray_hit.h>
 
 
 namespace raytracer {
@@ -15,19 +16,45 @@ namespace raytracer {
 
             virtual Color traceRay(const Ray& ray,
                                    const std::vector<Entity*>& scene,
-                                   const std::vector<Light*>& lights) const = 0;
+                                   const std::vector<Light*>& lights) const;
+
+        protected:
+            virtual Color processRayHit(const Ray& ray,
+                                        const RayHit& hit,
+                                        const std::vector<Entity*>& scene,
+                                        const std::vector<Light*>& lights) const = 0;
     };
 
-    class PhongModel : public LightModel {
+    class LambertModel : public LightModel {
         public:
-            PhongModel() : _ambient(Color(0.1, 0.1, 0.1)) {}
-            Color traceRay(const Ray& ray,
-                           const std::vector<Entity*>& scene,
-                           const std::vector<Light*>& lights) const override;
+            LambertModel() : _ambient(Color(0.01, 0.01, 0.01)) {}
 
-        private:
+            virtual Color processRayHit(const Ray& ray,
+                                        const RayHit& hit,
+                                        const std::vector<Entity*>& scene,
+                                        const std::vector<Light*>& lights) const override;
+
+        protected:
             Color _ambient;
 
+            virtual Color calculateDiffuseComponent(const Entity& entity,
+                                                    const Light& light,
+                                                    const vec3f& normal,
+                                                    const vec3f& lightVector) const;
+    };
+
+    class PhongModel : public LambertModel {
+        public:
+            virtual Color processRayHit(const Ray& ray,
+                                        const RayHit& hit,
+                                        const std::vector<Entity*>& scene,
+                                        const std::vector<Light*>& lights) const override;
+
+        protected:
+            virtual Color calculateSpecularComponent(const Entity& entity,
+                                                     const Light& light,
+                                                     const vec3f& normal,
+                                                     const vec3f& halfVector) const;
     };
 };
 

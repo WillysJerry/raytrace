@@ -1,51 +1,45 @@
 #include "light_model.h"
 
 #include <cmath>
-#include <limits>
 
 namespace raytracer {
 
-    Color PhongModel::traceRay(const Ray& ray,
-                               const std::vector<Entity*>& scene,
-                               const std::vector<Light*>& lights) const {
+    Color PhongModel::processRayHit(const Ray& ray,
+                                    const RayHit& hit,
+                                    const std::vector<Entity*>& scene,
+                                    const std::vector<Light*>& lights) const {
+        vec3f color = _ambient;
+        vec3f point = ray.pointAtParam(hit.t);
+        vec3f normal = hit.entity->normalAtPoint(point);
 
+        for(Light* light : lights) {
+            vec3f v = (ray.origin - point).normalize();
+            vec3f l = (light->position - point).normalize();
+            vec3f h = (v + l) / (v + l).magnitude();
 
+            Color diffuse = calculateDiffuseComponent(*hit.entity,
+                                                      *light,
+                                                      normal,
+                                                      l);
 
-        Color color = _ambient;
+            Color specular = calculateSpecularComponent(*hit.entity,
+                                                        *light,
+                                                        normal,
+                                                        l);
 
-        bool hitSomething = false;
-        float closest = std::numeric_limits<float>::max();
-        RayHit closestHit(std::numeric_limits<float>::max(), NULL);
-
-        RayHit hit;
-        for(Entity* entity : scene) {
-            if(entity->rayIntersects(ray, hit)) {
-                if(hit.t <= closestHit.t) {
-                    hitSomething = true;
-                    closestHit = hit;
-                }
-
-            }
+            color += diffuse + specular;
         }
 
-        if(hitSomething) {
-            vec3f point = ray.pointAtParam(closestHit.t);
-            vec3f normal = closestHit.entity->normalAtPoint(point);
-            for(Light* light : lights) {
-                vec3f v = (ray.origin - point).normalize();
-                vec3f l = (light->position - point).normalize();
-                vec3f h = (v + l) / (v + l).magnitude();
-
-                Color diffuse = closestHit.entity->getDiffuse() *
-                    light->intensity *
-                    fmax(0, vec3f::dot(normal, l));
-                Color specular = closestHit.entity->getSpecular() *
-                    light->intensity *
-                    std::pow(fmax(0, vec3f::dot(normal, h)), closestHit.entity->getShininess());
-
-                color += diffuse + specular;
-            }
-        }
         return color;
+    }
+
+    Color PhongModel::calculateSpecularComponent(const Entity& entity,
+                                                const Light& light,
+                                                const vec3f& normal,
+                                                const vec3f& halfVector) const {
+
+        return entity.getSpecular() *
+            light.intensity *
+            std::pow(fmax(0, vec3f::dot(normal, halfVector)), entity.getShininess());
     }
 }
