@@ -20,6 +20,7 @@ namespace raytracer {
             virtual Color getDiffuse() const { return _material.diffuse; }
             virtual Color getSpecular() const { return _material.specular; }
             virtual float getShininess() const { return _material.shininess; }
+            virtual float getReflectivity() const { return _material.reflectivity; }
 
             virtual bool rayIntersects(const Ray& ray) const = 0;
             virtual bool rayIntersects(const Ray& ray, RayHit& hit) const = 0;

@@ -11,11 +11,13 @@ namespace raytracer {
             Color specular;
 
             float shininess;
+            float reflectivity;
 
             Material(const Color& diffuse = Color(1, 1, 1),
                      const Color& specular = Color(0, 0, 0),
-                     const float& shininess = 0.0) :
-                diffuse(diffuse), specular(specular), shininess(shininess) {}
+                     const float& shininess = 0.0,
+                     const float& reflectivity = 0.0) :
+                diffuse(diffuse), specular(specular), shininess(shininess), reflectivity(reflectivity) {}
     };
 };
 

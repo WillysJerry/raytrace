@@ -66,10 +66,21 @@ namespace raytracer {
                                    lhs.x*rhs.y-lhs.y*rhs.x);
             }
 
+            static Vector3<T> mirror(const Vector3<T>& vec, const Vector3<T>& normal) {
+                return Vector3<T>(vec - 2.0 * dot(vec, normal) * normal);
+            }
+
             static T distance(const Vector3<T> a,
                               const Vector3<T> b) {
                 Vector3<T> ab = b - a;
                 return ab.magnitude();
+            }
+
+            static Vector3<T> clamp01(Vector3<T> vec) {
+                vec.x = fmin(1.0, fmax(0.0, vec.x));
+                vec.y = fmin(1.0, fmax(0.0, vec.y));
+                vec.z = fmin(1.0, fmax(0.0, vec.z));
+                return vec;
             }
 
             friend Vector3<T> operator*(const T lhs, Vector3<T> rhs) {

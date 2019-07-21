@@ -140,38 +140,44 @@ int main(int argc, char *argv[]) {
 
     Material red(Color(1, 0, 0),
                  Color(1, 1, 1),
-                 20.0);
+                 200.0,
+                 0.33f);
     Material green(Color(0, 1, 0),
                    Color(1, 1, 1),
-                   10.0);
+                   355.0,
+                   0.25f);
     Material blue(Color(0, 0, 1),
                   Color(1, 1, 1),
-                  50.0);
+                  100.0,
+                  0.1f);
     Material white(Color(1, 1, 1),
                    Color(1, 1, 1),
-                   100);
+                   1000,
+                   1.0f);
 
     Material gray(Color(0.4, 0.4, 0.4),
                   Color(1, 1, 1),
-                  200);
+                  760,
+                  0.8);
 
     Material orange(Color(0.7, 0.4, 0.0),
                     Color(1, 1, 1),
-                    500);
+                    430,
+                    0.22f);
 
     scene.push_back(new Sphere(vec3f(-4.0, 0.0, -8.0),
                                1.0f,
                                red));
 
-    scene.push_back(new Sphere(vec3f(-0.0, 3.0, -8.0),
+    scene.push_back(new Sphere(vec3f(-0.0, 3.0, -9.0),
                                1.0f,
                                green));
 
-    scene.push_back(new Sphere(vec3f(4.0, 0.0, -8.0),
+    scene.push_back(new Sphere(vec3f(4.0, 0.0, -10.0),
                                1.0f,
                                blue));
 
-    scene.push_back(new Sphere(vec3f(0.0, -3.0, -8.0),
+    scene.push_back(new Sphere(vec3f(0.0, -3.0, -7.0),
                                1.0f,
                                white));
 
@@ -182,11 +188,11 @@ int main(int argc, char *argv[]) {
     //scene.push_back(new Sphere(vec3f(-1.0, 8.0, -8.0), 2.0, gray));
 
     lights.push_back(new Light(vec3f(-1.0, 10.0, -8.0), Color(1.0, 1.0, 1.0), 1));
-    //lights.push_back(new Light(vec3f(2.0, 3.0, -5.0), Color(1.0, 0.2, 0.3)));
+    lights.push_back(new Light(vec3f(2.0, 3.0, -5.0), Color(1.0, 0.2, 0.3)));
     //
 
-    lightModels.push_back(new PhongModel());
-    lightModels.push_back(new LambertModel());
+    lightModels.push_back(new PhongModel(1));
+    lightModels.push_back(new LambertModel(1));
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);

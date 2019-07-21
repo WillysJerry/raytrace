@@ -6,13 +6,36 @@ namespace raytracer {
     Color LightModel::traceRay(const Ray& ray,
                                const std::vector<Entity*>& scene,
                                const std::vector<Light*>& lights) const {
+
+        return vec3f::clamp01(_ambient + doRayTrace(ray, scene, lights, _mirrorRecursionDepth));
+    }
+
+    Color LightModel::doRayTrace(const Ray& ray,
+                                 const std::vector<Entity*>& scene,
+                                 const std::vector<Light*>& lights,
+                                 int mirrorRecursions) const {
+
+        Color color = Color(0, 0, 0);
+
+        if(mirrorRecursions < 0)
+            return color;
+
         RayHit closestHit;
+
+
         if(getClosestRayHit(ray, scene, closestHit)) {
-            return fireLightRays(ray, closestHit, scene, lights);
+            vec3f point = ray.pointAtParam(closestHit.t);
+            vec3f normal = closestHit.entity->normalAtPoint(point);
+
+            color += fireLightRays(ray, closestHit, scene, lights);
+
+            Ray mirrorRay(point, vec3f::mirror(ray.direction, normal));
+            mirrorRay.marchOriginForward();
+            color += closestHit.entity->getReflectivity() * doRayTrace(mirrorRay, scene, lights, mirrorRecursions - 1);
             //return processRayHit(ray, closestHit, scene, lights);
         }
 
-        return Color(0, 0, 0);
+        return color;
     }
 
     Color LightModel::fireLightRays(const Ray& fromRay,

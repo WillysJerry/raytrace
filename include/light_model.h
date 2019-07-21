@@ -12,14 +12,23 @@
 namespace raytracer {
     class LightModel {
         public:
-            LightModel() : _ambient(Color(0.01, 0.01, 0.01)) {}
+            LightModel(int mirrorRecursionDepth = 0) : _ambient(Color(0.01, 0.01, 0.01)), _mirrorRecursionDepth(mirrorRecursionDepth) {}
 
             virtual Color traceRay(const Ray& ray,
                                    const std::vector<Entity*>& scene,
                                    const std::vector<Light*>& lights) const;
 
         protected:
+            // Maximum number of allowed mirror recursions (specular reflection bounces)
+            int _mirrorRecursionDepth;
+
+            // Base pixel color from ambient lighting
             Color _ambient;
+
+            virtual Color doRayTrace(const Ray& ray,
+                                     const std::vector<Entity*>& scene,
+                                     const std::vector<Light*>& lights,
+                                     int mirrorRecursions) const;
 
             virtual Color fireLightRays(const Ray& fromRay,
                                         const RayHit& hitPoint,
@@ -45,6 +54,7 @@ namespace raytracer {
 
     class LambertModel : public LightModel {
         public:
+            LambertModel(int mirrorRecursionDepth) : LightModel(mirrorRecursionDepth) {}
 
         protected:
             virtual Color calculateLightContribution(const Ray& fromRay,
@@ -62,6 +72,7 @@ namespace raytracer {
 
     class PhongModel : public LambertModel {
         public:
+            PhongModel(int mirrorRecursionDepth) : LambertModel(mirrorRecursionDepth) {}
 
         protected:
             virtual Color calculateLightContribution(const Ray& fromRay,

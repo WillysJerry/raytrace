@@ -15,6 +15,7 @@ namespace raytracer {
             void marchOriginForward() { origin = origin + direction * EPSILON; }
 
             vec3f pointAtParam(const float& t) const { return origin + t * direction; }
+
     };
 };
 
