@@ -20,6 +20,8 @@ namespace raytracer {
             virtual Color getDiffuse() const { return _material.diffuse; }
             virtual Color getSpecular() const { return _material.specular; }
             virtual float getShininess() const { return _material.shininess; }
+
+            virtual bool rayIntersects(const Ray& ray) const = 0;
             virtual bool rayIntersects(const Ray& ray, RayHit& hit) const = 0;
 
             virtual vec3f normalAtPoint(const vec3f& point) const = 0;
@@ -35,6 +37,7 @@ namespace raytracer {
             Plane(const vec3f& position);
             Plane(const vec3f& position, const Material& material);
 
+            bool rayIntersects(const Ray& ray) const override;
             bool rayIntersects(const Ray& ray, RayHit& hit) const override;
             vec3f normalAtPoint(const vec3f& point) const override;
 
@@ -47,6 +50,7 @@ namespace raytracer {
             Sphere(const vec3f& position, const float& radius);
             Sphere(const vec3f& position, const float& radius, const Material& material);
 
+            bool rayIntersects(const Ray& ray) const override;
             bool rayIntersects(const Ray& ray, RayHit& hit) const override;
             vec3f normalAtPoint(const vec3f& point) const override;
 

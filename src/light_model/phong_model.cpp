@@ -4,33 +4,26 @@
 
 namespace raytracer {
 
-    Color PhongModel::processRayHit(const Ray& ray,
-                                    const RayHit& hit,
-                                    const std::vector<Entity*>& scene,
-                                    const std::vector<Light*>& lights) const {
-        vec3f color = _ambient;
-        vec3f point = ray.pointAtParam(hit.t);
-        vec3f normal = hit.entity->normalAtPoint(point);
+    Color PhongModel::calculateLightContribution(const Ray& fromRay,
+                                                 const Light& light,
+                                                 const Entity& entity,
+                                                 const vec3f& hitPoint,
+                                                 const vec3f& normal,
+                                                 const vec3f& toLight) const {
 
-        for(Light* light : lights) {
-            vec3f v = (ray.origin - point).normalize();
-            vec3f l = (light->position - point).normalize();
-            vec3f h = (v + l) / (v + l).magnitude();
+        vec3f view = (fromRay.origin - hitPoint).normalize();
+        vec3f half = (view + toLight) / (view + toLight).magnitude();
 
-            Color diffuse = calculateDiffuseComponent(*hit.entity,
-                                                      *light,
-                                                      normal,
-                                                      l);
+        Color diffuse = calculateDiffuseComponent(entity,
+                                                  light,
+                                                  normal,
+                                                  toLight);
 
-            Color specular = calculateSpecularComponent(*hit.entity,
-                                                        *light,
-                                                        normal,
-                                                        l);
-
-            color += diffuse + specular;
-        }
-
-        return color;
+        Color specular = calculateSpecularComponent(entity,
+                                                    light,
+                                                    normal,
+                                                    half);
+        return diffuse + specular;
     }
 
     Color PhongModel::calculateSpecularComponent(const Entity& entity,

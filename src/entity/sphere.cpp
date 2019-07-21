@@ -12,6 +12,33 @@ namespace raytracer {
         Entity(position, material), _radius(radius) {
     }
 
+    bool Sphere::rayIntersects(const Ray& ray) const {
+        vec3f to = ray.origin - transform.getPosition();
+
+        float a = vec3f::dot(ray.direction, ray.direction);
+        float b = 2.0 * vec3f::dot(to, ray.direction);
+        float c = vec3f::dot(to, to) - _radius*_radius;
+
+        float discriminant = b*b - 4*a*c;
+
+        if(discriminant > EPSILON) {
+            float sqrtDiscriminant = std::sqrt(discriminant);
+            float numerator = -b - sqrtDiscriminant;
+
+            if(numerator > EPSILON) {
+                return true;
+            }
+
+            numerator = -b + sqrtDiscriminant;
+
+            if(numerator > EPSILON) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     bool Sphere::rayIntersects(const Ray& ray, RayHit& hit) const {
         vec3f to = ray.origin - transform.getPosition();
 
@@ -21,11 +48,11 @@ namespace raytracer {
 
         float discriminant = b*b - 4*a*c;
 
-        if(discriminant > Entity::_eps) {
+        if(discriminant > EPSILON) {
             float sqrtDiscriminant = std::sqrt(discriminant);
             float numerator = -b - sqrtDiscriminant;
 
-            if(numerator > Entity::_eps) {
+            if(numerator > EPSILON) {
                 hit.t = numerator / 2.0 * a;
                 hit.entity = this;
                 return true;
@@ -33,7 +60,7 @@ namespace raytracer {
 
             numerator = -b + sqrtDiscriminant;
 
-            if(numerator > Entity::_eps) {
+            if(numerator > EPSILON) {
                 hit.t = numerator / 2.0 * a;
                 hit.entity = this;
                 return true;

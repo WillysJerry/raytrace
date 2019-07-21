@@ -12,30 +12,47 @@
 namespace raytracer {
     class LightModel {
         public:
-            LightModel() {}
+            LightModel() : _ambient(Color(0.01, 0.01, 0.01)) {}
 
             virtual Color traceRay(const Ray& ray,
                                    const std::vector<Entity*>& scene,
                                    const std::vector<Light*>& lights) const;
 
         protected:
-            virtual Color processRayHit(const Ray& ray,
-                                        const RayHit& hit,
+            Color _ambient;
+
+            virtual Color fireLightRays(const Ray& fromRay,
+                                        const RayHit& hitPoint,
                                         const std::vector<Entity*>& scene,
-                                        const std::vector<Light*>& lights) const = 0;
+                                        const std::vector<Light*>& lights) const;
+
+            virtual bool checkRayHit(const Ray& ray,
+                                     const std::vector<Entity*>& scene) const;
+
+            virtual bool getClosestRayHit(const Ray& ray,
+                                          const std::vector<Entity*>& scene,
+                                          RayHit& closestHit) const;
+
+            virtual Color calculateLightContribution(const Ray& fromRay,
+                                                     const Light& light,
+                                                     const Entity& entity,
+                                                     const vec3f& hitPoint,
+                                                     const vec3f& normal,
+                                                     const vec3f& toLight) const = 0;
+
+            Ray createReflectionRay(const vec3f& position, const vec3f& direction) const;
     };
 
     class LambertModel : public LightModel {
         public:
-            LambertModel() : _ambient(Color(0.01, 0.01, 0.01)) {}
-
-            virtual Color processRayHit(const Ray& ray,
-                                        const RayHit& hit,
-                                        const std::vector<Entity*>& scene,
-                                        const std::vector<Light*>& lights) const override;
 
         protected:
-            Color _ambient;
+            virtual Color calculateLightContribution(const Ray& fromRay,
+                                                     const Light& light,
+                                                     const Entity& entity,
+                                                     const vec3f& hitPoint,
+                                                     const vec3f& normal,
+                                                     const vec3f& toLight) const override;
 
             virtual Color calculateDiffuseComponent(const Entity& entity,
                                                     const Light& light,
@@ -45,12 +62,15 @@ namespace raytracer {
 
     class PhongModel : public LambertModel {
         public:
-            virtual Color processRayHit(const Ray& ray,
-                                        const RayHit& hit,
-                                        const std::vector<Entity*>& scene,
-                                        const std::vector<Light*>& lights) const override;
 
         protected:
+            virtual Color calculateLightContribution(const Ray& fromRay,
+                                                     const Light& light,
+                                                     const Entity& entity,
+                                                     const vec3f& hitPoint,
+                                                     const vec3f& normal,
+                                                     const vec3f& toLight) const override;
+
             virtual Color calculateSpecularComponent(const Entity& entity,
                                                      const Light& light,
                                                      const vec3f& normal,

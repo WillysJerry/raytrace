@@ -4,26 +4,19 @@
 
 namespace raytracer {
 
-    Color LambertModel::processRayHit(const Ray& ray,
-                                    const RayHit& hit,
-                                    const std::vector<Entity*>& scene,
-                                    const std::vector<Light*>& lights) const {
-        vec3f color = _ambient;
-        vec3f point = ray.pointAtParam(hit.t);
-        vec3f normal = hit.entity->normalAtPoint(point);
+    Color LambertModel::calculateLightContribution(const Ray& fromRay,
+                                                   const Light& light,
+                                                   const Entity& entity,
+                                                   const vec3f& hitPoint,
+                                                   const vec3f& normal,
+                                                   const vec3f& toLight) const {
 
-        for(Light* light : lights) {
-            vec3f l = (light->position - point).normalize();
+        Color diffuse = calculateDiffuseComponent(entity,
+                                                  light,
+                                                  normal,
+                                                  toLight);
 
-            Color diffuse = calculateDiffuseComponent(*hit.entity,
-                                                      *light,
-                                                      normal,
-                                                      l);
-
-            color += diffuse;
-        }
-
-        return color;
+        return diffuse;
     }
 
     Color LambertModel::calculateDiffuseComponent(const Entity& entity,

@@ -16,6 +16,8 @@ namespace raytracer {
     template<class T>
     class Vector4;
 
+    static const float EPSILON = 0.0001f;
+
     inline float fmax(const float& x, const float& y) {
         return x > y ? x : y;
     }
@@ -62,6 +64,12 @@ namespace raytracer {
                 return Vector3<T>( lhs.y*rhs.z-lhs.z*rhs.y,
                                    lhs.z*rhs.x-lhs.x*rhs.z,
                                    lhs.x*rhs.y-lhs.y*rhs.x);
+            }
+
+            static T distance(const Vector3<T> a,
+                              const Vector3<T> b) {
+                Vector3<T> ab = b - a;
+                return ab.magnitude();
             }
 
             friend Vector3<T> operator*(const T lhs, Vector3<T> rhs) {

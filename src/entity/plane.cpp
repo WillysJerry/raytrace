@@ -12,12 +12,24 @@ namespace raytracer {
         _normal = vec3f(0, 1, 0);
     }
 
+    bool Plane::rayIntersects(const Ray& ray) const {
+        float denom = vec3f::dot(_normal, ray.direction);
+
+        if(fabs(denom) > EPSILON) {
+            float t = vec3f::dot(transform.getPosition() - ray.origin, _normal) / denom;
+            return t >= EPSILON;
+        }
+
+        return false;
+
+    }
+
     bool Plane::rayIntersects(const Ray& ray, RayHit& hit) const {
         float denom = vec3f::dot(_normal, ray.direction);
 
         if(fabs(denom) > Entity::_eps) {
             float t = vec3f::dot(transform.getPosition() - ray.origin, _normal) / denom;
-            if (t >= Entity::_eps) {
+            if (t >= EPSILON) {
 
                 hit.t = t;
                 hit.entity = this;

@@ -12,6 +12,8 @@ namespace raytracer {
             Ray(const vec3f& origin, const vec3f& direction) : origin(origin),
                                                                direction(direction) {}
 
+            void marchOriginForward() { origin = origin + direction * EPSILON; }
+
             vec3f pointAtParam(const float& t) const { return origin + t * direction; }
     };
 };

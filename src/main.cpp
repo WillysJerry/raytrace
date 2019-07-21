@@ -179,6 +179,8 @@ int main(int argc, char *argv[]) {
 
     scene.push_back(new Sphere(vec3f(-2.0, 0.0, -30.0), 10.0, orange));
 
+    //scene.push_back(new Sphere(vec3f(-1.0, 8.0, -8.0), 2.0, gray));
+
     lights.push_back(new Light(vec3f(-1.0, 10.0, -8.0), Color(1.0, 1.0, 1.0), 1));
     //lights.push_back(new Light(vec3f(2.0, 3.0, -5.0), Color(1.0, 0.2, 0.3)));
     //
