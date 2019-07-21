@@ -11,7 +11,29 @@ namespace raytracer {
 
     }
 
+    Transform::Transform(const vec3f& position, const vec3f& rotation, const vec3f& scaling) {
+        setPosition(position);
+        setRotation(rotation);
+        setScale(scaling);
+    }
+
     Transform::~Transform() {
+    }
+
+    void Transform::setPosition(const vec3f& position) {
+        _translationMatrix = mkTranslationMatrix(position);
+        _position = position;
+    }
+
+    void Transform::setRotation(const vec3f& rotation) {
+        _rotationMatrix =
+            mkRotationMatrix(rotation.x, Axis::X) *
+            mkRotationMatrix(rotation.y, Axis::Y) *
+            mkRotationMatrix(rotation.z, Axis::Z);
+    }
+
+    void Transform::setScale(const vec3f& scale) {
+        _scalingMatrix = mkScalingMatrix(scale);
     }
 
     vec3f Transform::getForwardVector() const {

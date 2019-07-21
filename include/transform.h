@@ -10,6 +10,7 @@ namespace raytracer {
         public:
 
             Transform();
+            Transform(const vec3f& position, const vec3f& rotation, const vec3f& scaling);
             ~Transform();
 
             const mat4x4f& getTranslationMatrix() const { return _translationMatrix; }
@@ -17,6 +18,10 @@ namespace raytracer {
             const mat4x4f& getScalingMatrix()     const { return _scalingMatrix; }
 
             vec3f getPosition() const { return _position; }
+
+            void setPosition(const vec3f& position);
+            void setRotation(const vec3f& rotation);
+            void setScale(const vec3f& scale);
 
             vec3f getForwardVector() const;
             vec3f getUpVector() const;

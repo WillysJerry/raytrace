@@ -24,10 +24,6 @@ std::vector<Light*> lights;
 std::vector<Camera> cameras;
 std::vector<LightModel*> lightModels;
 
-//Camera camera( 320, 320, 0.02 );
-//LightModel* lightModel;
-
-
 void toPPM() {
     PixBuf* pixBuf;
     cameras[activeCamera].render(*lightModels[activeLightModel], scene, lights, pixBuf);
@@ -71,6 +67,9 @@ void keyPressed(unsigned char key, int x, int y) {
             break;
         case 'E':
             cam.transform.axisRotate(-rot, Axis::X);
+            break;
+        case 'r':
+            cam.transform.setRotation(vec3f(0, 0, 0));
             break;
         case 'w':
             cam.transform.translate(cam.transform.getForwardVector());
@@ -135,14 +134,9 @@ void renderScene(void) {
 
 int main(int argc, char *argv[]) {
 
-    //Camera camera( 320, 320, 0.02 );
-    cameras.push_back(Camera(320, 320, 0.001, vec3f(0,1,0)));
-    cameras[0].transform.axisRotate(DEGREES_TO_RADIANS(180), Axis::Y);
-    cameras.push_back(Camera(320, 320, 0.001, vec3f(-13,0,-6)));
-    cameras[1].transform.axisRotate(DEGREES_TO_RADIANS(225), Axis::Y);
-    cameras.push_back(Camera(320, 320, 0.001, vec3f(0,15,-14)));
-    cameras[2].transform.axisRotate(DEGREES_TO_RADIANS(90), Axis::X);
-    cameras[2].transform.axisRotate(DEGREES_TO_RADIANS(180), Axis::Y);
+    cameras.push_back(Camera(320, 320, 0.001, vec3f(0,1,0), vec3f(0, DEGREES_TO_RADIANS(180), 0)));
+    cameras.push_back(Camera(320, 320, 0.001, vec3f(-13,0,-6), vec3f(0, DEGREES_TO_RADIANS(225), 0)));
+    cameras.push_back(Camera(320, 320, 0.001, vec3f(0,15,-14), vec3f(DEGREES_TO_RADIANS(90), DEGREES_TO_RADIANS(180), 0)));
 
     Material red(Color(1, 0, 0),
                  Color(1, 1, 1),
@@ -188,9 +182,6 @@ int main(int argc, char *argv[]) {
     lights.push_back(new Light(vec3f(-1.0, 10.0, -8.0), Color(1.0, 1.0, 1.0), 1));
     //lights.push_back(new Light(vec3f(2.0, 3.0, -5.0), Color(1.0, 0.2, 0.3)));
     //
-
-    //lightModel = new PhongModel();
-    //lightModel = new LambertModel();
 
     lightModels.push_back(new PhongModel());
     lightModels.push_back(new LambertModel());

@@ -5,10 +5,10 @@
 
 namespace raytracer {
 
-    Camera::Camera(const int& px, const int& py, const float& focalDist, const vec3f& position)
-        : _px(px), _py(py), _focalDist(focalDist) {
+    Camera::Camera(const int& px, const int& py, const float& focalDist, const vec3f& position, const vec3f& rotation)
+        : _px(px), _py(py), _focalDist(focalDist), transform(position, rotation, vec3f(1,1,1)) {
 
-        transform.translate(position);
+        //transform.translate(position);
         //transform.setPosition(position);
         _l = -1.0; _r =  1.0;
         _t =  1.0; _b = -1.0;
