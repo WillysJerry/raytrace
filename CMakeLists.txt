@@ -6,7 +6,7 @@ find_package(GLUT REQUIRED)
 
 include_directories(include ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS})
 
-set(CMAKE_CXX_FLAGS "-g")
+set(CMAKE_CXX_FLAGS "-g -std=c++11")
 
 set(MATH_FILES
   lib/math/transform.cpp)
